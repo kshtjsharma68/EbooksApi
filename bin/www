@@ -7,7 +7,6 @@
 var app = require('../app');
 var debug = require('debug')('ebapi:server');
 var http = require('http');
-var io = require('socket.io')(http);
 
 /**
  * Get port from environment and store in Express.
@@ -22,22 +21,35 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+var io = require('socket.io')(server);
+
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-// server.listen(port, () => {
-//   //information
-//   console.info(`Listening on *:${port}`);
-// });
-var io = require('socket.io').listen(app.listen(port));
+server.listen(port, () => {
+  //information
+  console.info(`Listening on *:${port}`);
+});
+// var io = require('socket.io').listen(app.listen(port));
 
 io.sockets.on('connection', function (socket) {
+  console.log('inside connection socket')
     socket.emit('message', { message: 'welcome to the chat' });
     socket.on('send', function (data) {
       console.log('error in socket')
         io.sockets.emit('message', data);
     });
+
+    socket.on('messages', function(data) {
+      socket.emit('broad', data);
+      socket.broadcast.emit('broad', data)
+    })
+
+    socket.on('join', function(data) {
+      console.log(data, 'on join')
+      socket.emit('messages', 'hello from server')
+    })
 });
 
 server.on('error', onError);

@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-
+var app = express();
 //Chat route
 router.get('/', (req, res, next) => {
-	res.render('chat', { title: 'Chat'});
+	res.sendFile(app.get('views')+'/chat.html');
 });
 
 router.post('/messgae', (req, res, next) => {

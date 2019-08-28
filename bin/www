@@ -35,13 +35,14 @@ server.listen(port, () => {
 
 io.sockets.on('connection', function (socket) {
   console.log('inside connection socket')
-    socket.emit('message', { message: 'welcome to the chat' });
+    socket.emit('message', { message: 'welcome to the chat' }); //emitting to a single socket
+    io.emit('messages', 'This will be everyone');  //emitting globally
     socket.on('send', function (data) {
       console.log('error in socket')
         io.sockets.emit('message', data);
     });
 
-    socket.on('messages', function(data) {
+    socket.on('messages', function(data) {console.log(data)
       socket.emit('broad', data);
       socket.broadcast.emit('broad', data)
     })

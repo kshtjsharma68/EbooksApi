@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -10,6 +11,13 @@ var randomRouter = require('./routes/random');
 
 var cors = require('cors');
 var app = express();
+
+//MongoDB connection
+const dbRoute = 'mongodb+srv://kshtjsharma68:cricketer@420@cluster0-gvzjv.mongodb.net/test?retryWrites=true&w=majority';
+let db = mongoose.connection;
+db.once('open', () => console.log('Connected to database'));
+
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

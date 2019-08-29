@@ -15,9 +15,9 @@
         <script type="text/javascript">
             var socket = io.connect('http://localhost:3000')
             socket.on('connect', function(data) {
-                socket.emit('join', 'Hello world from client');
+                socket.emit('join', 'Client to client');
                 socket.on('messages', function(data) {
-                    alert(data)
+                    console.log('Message from message portal', data)
                 })
             })
             socket.on('broad', function(data) {
@@ -27,6 +27,7 @@
             $('form').submit(function(e) {
                 e.preventDefault();
                 var message = $('#chat_input').val();
+                $('#chat_input').val('')
                 socket.emit('messages', message)
             });
         </script>
